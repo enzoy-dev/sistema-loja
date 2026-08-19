@@ -1,0 +1,14 @@
+# Ambiente
+.env
+
+# Bancos locais
+*.db
+*.sqlite
+*.sqlite3
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
