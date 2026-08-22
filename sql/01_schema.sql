@@ -33,3 +33,39 @@ CREATE TABLE itens_pedido (
     quantidade INTEGER NOT NULL,
     preco_unitario DECIMAL(10, 2) NOT NULL
 );
+
+ALTER TABLE produtos
+ADD CONSTRAINT fk_produto_categoria
+FOREIGN KEY (categoria_id)
+REFERENCES categorias(id);
+
+ALTER TABLE pedidos
+ADD CONSTRAINT fk_pedido_cliente
+FOREIGN KEY (cliente_id)
+REFERENCES clientes(id);
+
+ALTER TABLE itens_pedido
+ADD CONSTRAINT fk_item_pedido
+FOREIGN KEY (pedido_id)
+REFERENCES pedidos(id);
+
+ALTER TABLE itens_pedido
+ADD CONSTRAINT fk_item_produto
+FOREIGN KEY (produto_id)
+REFERENCES produtos(id);
+
+ALTER TABLE produtos
+ADD CONSTRAINT chk_produto_preco
+CHECK (preco >= 0);
+
+ALTER TABLE produtos
+ADD CONSTRAINT chk_produto_estoque
+CHECK (estoque >= 0);
+
+ALTER TABLE itens_pedido
+ADD CONSTRAINT chk_item_quantidade
+CHECK (quantidade > 0);
+
+ALTER TABLE itens_pedido
+ADD CONSTRAINT chk_item_preco
+CHECK (preco_unitario >= 0);
