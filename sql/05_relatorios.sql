@@ -42,3 +42,7 @@ JOIN itens_pedido
 GROUP BY produtos.id, produtos.nome
 ORDER BY quantidade_vendida DESC
 LIMIT 1;
+
+SELECT
+    SUM(quantidade * preco_unitario) AS faturamento_total
+FROM itens_pedido;
