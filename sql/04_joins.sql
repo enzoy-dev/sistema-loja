@@ -44,3 +44,12 @@ JOIN clientes
 JOIN produtos
     ON itens_pedido.produto_id = produtos.id
 ORDER BY pedidos.id;
+
+SELECT
+    clientes.nome AS cliente,
+    pedidos.id AS pedido,
+    pedidos.status
+FROM clientes
+LEFT JOIN pedidos
+    ON clientes.id = pedidos.cliente_id
+ORDER BY clientes.nome;
