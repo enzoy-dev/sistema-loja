@@ -102,3 +102,12 @@ JOIN itens_pedido
 GROUP BY pedidos.id, pedidos.data_pedido
 
 ORDER BY pedidos.id;
+
+SELECT
+    nome,
+    preco,
+    RANK() OVER (
+        ORDER BY preco DESC
+    ) AS ranking_preco
+FROM produtos
+ORDER BY ranking_preco;
