@@ -10,3 +10,6 @@ ON produtos(categoria_id);
 
 CREATE INDEX idx_itens_pedido_produto
 ON itens_pedido(produto_id);
+
+CREATE INDEX idx_pedidos_cliente
+ON pedidos(cliente_id);
