@@ -14,7 +14,7 @@ CREATE TABLE clientes (
 CREATE TABLE produtos (
     id INTEGER PRIMARY KEY,
     nome VARCHAR(150) NOT NULL,
-    preco DECIMAL(10, 2) NOT NULL,
+    preco DECIMAL(10,2) CHECK (preco >= 0) NOT NULL,
     estoque INTEGER NOT NULL,
     categoria_id INTEGER NOT NULL
 );
