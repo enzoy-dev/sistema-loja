@@ -1,18 +1,28 @@
 CREATE TABLE categorias (
-    id INTEGER PRIMARY KEY,
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     nome VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE clientes (
-    id INTEGER PRIMARY KEY,
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(150) NOT NULL,
     telefone VARCHAR(20),
-    data_cadastro DATE NOT NULL
+    data_cadastro DATE NOT NULL DEFAULT CURRENT_DATE,
+
+    CONSTRAINT uq_cliente_email
+        UNIQUE (email),
+
+    CONSTRAINT chk_cliente_nome
+        CHECK (LENGTH(TRIM(nome)) >= 3),
+
+    CONSTRAINT chk_cliente_email
+        CHECK (POSITION('@' IN email) > 1)
 );
 
+
 CREATE TABLE produtos (
-    id INTEGER PRIMARY KEY,
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     nome VARCHAR(150) NOT NULL,
     preco DECIMAL(10,2) CHECK (preco >= 0) NOT NULL,
     estoque INTEGER NOT NULL,
@@ -20,18 +30,18 @@ CREATE TABLE produtos (
 );
 
 CREATE TABLE pedidos (
-    id INTEGER PRIMARY KEY,
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     cliente_id INTEGER NOT NULL,
-    data_pedido DATE NOT NULL,
+    data_pedido DATE NOT NULL DEFAULT CURRENT_DATE,
     status VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE itens_pedido (
-    id INTEGER PRIMARY KEY,
-    pedido_id INTEGER NOT NULL,
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+pedido_id INTEGER NOT NULL,
     produto_id INTEGER NOT NULL,
     quantidade INTEGER NOT NULL,
-    preco_unitario DECIMAL(10, 2) NOT NULL
+    preco_unitario DECIMAL(10,2) NOT NULL
 );
 
 ALTER TABLE produtos
