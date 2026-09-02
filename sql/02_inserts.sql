@@ -1,10 +1,10 @@
-INSERT INTO clientes (id, nome, email, telefone, data_cadastro)
+INSERT INTO clientes (nome, email, telefone, data_cadastro)
 VALUES
-    (1, 'Carlos Silva', 'carlos@email.com', '11999990001', '2026-08-19'),
-    (2, 'Ana Souza', 'ana@email.com', '11999990002', '2026-08-19'),
-    (3, 'Lucas Oliveira', 'lucas@email.com', '11999990003', '2026-08-20'),
-    (4, 'Mariana Santos', 'mariana@email.com', '11999990004', '2026-08-20'),
-    (5, 'Pedro Costa', 'pedro@email.com', '11999990005', '2026-08-21');
+    ('Carlos Silva', 'carlos@email.com', '11999990001', '2026-08-19'),
+    ('Ana Souza', 'ana@email.com', '11999990002', '2026-08-19'),
+    ('Lucas Oliveira', 'lucas@email.com', '11999990003', '2026-08-20'),
+    ('Mariana Santos', 'mariana@email.com', '11999990004', '2026-08-20'),
+    ('Pedro Costa', 'pedro@email.com', '11999990005', '2026-08-21');
 
 INSERT INTO produtos (id, nome, preco, estoque, categoria_id)
 VALUES
