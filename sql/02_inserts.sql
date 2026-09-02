@@ -20,7 +20,7 @@ INSERT INTO produtos (nome, preco, estoque, categoria_id) VALUES
     ('Teclado', 199.90, 30, 1),
     ('Camiseta', 79.90, 40, 2),
     ('Calça Jeans', 149.90, 20, 2),
-    ('Chocolate', 8.50, 100, 3),
+    ('Chocolate', 8.50, 100, 3),git 
 
 
 -- Pedidos

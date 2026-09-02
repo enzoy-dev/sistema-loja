@@ -1,4 +1,4 @@
-CCREATE TABLE historico_status_pedido (
+CREATE TABLE historico_status_pedido (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     pedido_id INTEGER NOT NULL,
     status_anterior VARCHAR(30),
