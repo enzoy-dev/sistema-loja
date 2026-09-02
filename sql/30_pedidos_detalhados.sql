@@ -7,11 +7,10 @@ SELECT
     p.nome AS produto,
     ip.quantidade,
     ip.preco_unitario,
-    ip.quantidade * ip.preco_unitario AS subtotal
+    (ip.quantidade * ip.preco_unitario) AS subtotal,
+    SUM(ip.quantidade * ip.preco_unitario) OVER (PARTITION BY pe.id) AS total_pedido
 FROM pedidos pe
-JOIN clientes c
-    ON pe.cliente_id = c.id
-JOIN itens_pedido ip
-    ON pe.id = ip.pedido_id
-JOIN produtos p
-    ON ip.produto_id = p.id;
+JOIN clientes c ON pe.cliente_id = c.id
+JOIN itens_pedido ip ON pe.id = ip.pedido_id
+JOIN produtos p ON ip.produto_id = p.id
+ORDER BY pe.id, p.nome;
