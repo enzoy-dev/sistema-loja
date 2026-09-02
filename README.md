@@ -1,19 +1,25 @@
 # Sistema de Loja
 
-Projeto desenvolvido para estudar SQL e modelagem de bancos de dados.
+Projeto de estudo focado em **SQL** e **modelagem de banco de dados** com PostgreSQL.
 
 ## Objetivo
 
-Criar um banco de dados para administrar uma loja, incluindo clientes,
-produtos, categorias, pedidos e itens vendidos.
+Criar um banco de dados completo para administração de uma loja, cobrindo:
+
+- Clientes, produtos, categorias e pedidos
+- Controle de estoque com histórico
+- Procedures de venda e cancelamento
+- Triggers, functions, views e relatórios
+- Integridade e constraints
 
 ## Tecnologias
 
-- SQL
 - PostgreSQL
-- Git
-- GitHub
+- SQL (DDL + DML + PL/pgSQL)
+- Git / GitHub
 
-## Status
+## Como executar
 
- Em desenvolvimento
+1. Crie um banco:
+```bash
+createdb sistema_loja
