@@ -8,7 +8,9 @@ SELECT
     ip.quantidade,
     ip.preco_unitario,
     (ip.quantidade * ip.preco_unitario) AS subtotal,
-    SUM(ip.quantidade * ip.preco_unitario) OVER (PARTITION BY pe.id) AS total_pedido
+    SUM(ip.quantidade * ip.preco_unitario) OVER (PARTITION BY pe.id) - pe.desconto + pe.frete AS total_pedido,
+    pe.desconto,
+    pe.frete
 FROM pedidos pe
 JOIN clientes c ON pe.cliente_id = c.id
 JOIN itens_pedido ip ON pe.id = ip.pedido_id

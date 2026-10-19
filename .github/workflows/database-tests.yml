@@ -1,0 +1,60 @@
+name: Database tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  database-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    env:
+      PGHOST: 127.0.0.1
+      PGPORT: 5432
+      PGUSER: postgres
+      # Disposable CI database only; this is not a production credential.
+      PGPASSWORD: postgres
+      PGCONNECT_TIMEOUT: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install PostgreSQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes postgresql-client
+      - name: Install API and test dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Install database from scratch
+        run: |
+          createdb sistema_loja_testes
+          psql -X -v ON_ERROR_STOP=1 -d sistema_loja_testes -f sql/00_setup.sql
+      - name: Test sales, cancellations and inventory rules
+        run: psql -X -v ON_ERROR_STOP=1 -d sistema_loja_testes -f tests/regressao.sql
+      - name: Test concurrent sales of the last unit
+        run: |
+          python tests/concorrencia.py
+          python tests/concorrencia.py --multiplos
+      - name: Test API and multi-item checkout
+        run: python -m pytest -q

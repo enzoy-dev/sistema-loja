@@ -19,16 +19,13 @@ SELECT
     ) AS pedidos_concluidos,
 
     (
-        SELECT COALESCE(
-            SUM(
-                quantidade * preco_unitario
-            ),
-            0
-        )
-        FROM itens_pedido
-        JOIN pedidos
-            ON itens_pedido.pedido_id = pedidos.id
-        WHERE pedidos.status = 'concluido'
+        SELECT COALESCE(SUM(t.subtotal - pe.desconto + pe.frete), 0)
+        FROM pedidos pe
+        JOIN (
+            SELECT pedido_id, SUM(quantidade * preco_unitario) AS subtotal
+            FROM itens_pedido GROUP BY pedido_id
+        ) t ON t.pedido_id = pe.id
+        WHERE pe.status = 'concluido'
     ) AS faturamento,
 
     (
