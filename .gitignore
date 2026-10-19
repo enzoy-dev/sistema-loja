@@ -12,3 +12,11 @@ Thumbs.db
 
 # VS Code
 .vscode/
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Backups PostgreSQL
+*.dump

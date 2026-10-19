@@ -1,22 +1,12 @@
-CREATE OR REPLACE FUNCTION calcular_total_pedido(
-    p_pedido_id INTEGER
-)
+CREATE OR REPLACE FUNCTION calcular_total_pedido(p_pedido_id INTEGER)
 RETURNS DECIMAL(10,2)
-LANGUAGE plpgsql
+LANGUAGE SQL
 AS $$
-DECLARE
-    total DECIMAL(10,2);
-BEGIN
-
-    SELECT COALESCE(
-        SUM(quantidade * preco_unitario),
-        0
-    )
-    INTO total
-    FROM itens_pedido
-    WHERE pedido_id = p_pedido_id;
-
-    RETURN total;
-
-END;
+    SELECT COALESCE((
+        SELECT COALESCE(SUM(ip.quantidade * ip.preco_unitario), 0) - pe.desconto + pe.frete
+        FROM pedidos pe
+        LEFT JOIN itens_pedido ip ON ip.pedido_id = pe.id
+        WHERE pe.id = p_pedido_id
+        GROUP BY pe.id
+    ), 0);
 $$;

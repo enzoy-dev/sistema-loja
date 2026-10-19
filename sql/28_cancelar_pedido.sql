@@ -40,7 +40,8 @@ BEGIN
         'entrada',
         quantidade
     FROM itens_pedido
-    WHERE pedido_id = p_pedido_id;
+    WHERE pedido_id = p_pedido_id
+    ORDER BY produto_id;
 
 END;
 $$;

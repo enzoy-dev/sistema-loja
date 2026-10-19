@@ -16,6 +16,7 @@ BEGIN;
 \ir 13_integridade.sql
 \ir 14_constraints.sql
 \ir 31_status_pedido.sql
+\ir 32_valores_pedido.sql
 
 \echo '>>> Criando histórico de estoque...'
 \ir 15_historico_estoque.sql
@@ -27,6 +28,7 @@ BEGIN;
 \ir 19_validacao_estoque.sql
 
 \echo '>>> Criando procedures de negócio...'
+\ir 33_registrar_pedido.sql
 \ir 20_registrar_venda.sql
 \ir 28_cancelar_pedido.sql
 
