@@ -9,11 +9,19 @@ DECLARE
     novo_pedido_id INTEGER;
     preco_produto DECIMAL(10,2);
 BEGIN
+    IF p_quantidade IS NULL OR p_quantidade <= 0 THEN
+        RAISE EXCEPTION 'Quantidade deve ser maior que zero';
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM clientes WHERE id = p_cliente_id) THEN
+        RAISE EXCEPTION 'Cliente não encontrado';
+    END IF;
 
     SELECT preco
     INTO preco_produto
     FROM produtos
-    WHERE id = p_produto_id;
+    WHERE id = p_produto_id
+    FOR UPDATE;
 
     IF preco_produto IS NULL THEN
         RAISE EXCEPTION 'Produto não encontrado';

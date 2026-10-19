@@ -34,7 +34,10 @@ BEGIN
     FROM produtos
     WHERE id = p_produto_id;
 
-    RETURN COALESCE(estoque_atual, 0) >= p_quantidade;
+    RETURN estoque_atual IS NOT NULL
+        AND p_quantidade IS NOT NULL
+        AND p_quantidade > 0
+        AND estoque_atual >= p_quantidade;
 
 END;
 $$;

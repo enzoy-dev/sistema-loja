@@ -9,7 +9,8 @@ BEGIN
     SELECT estoque
     INTO estoque_atual
     FROM produtos
-    WHERE id = NEW.produto_id;
+    WHERE id = NEW.produto_id
+    FOR UPDATE;
 
     IF NEW.tipo = 'saida' THEN
 
