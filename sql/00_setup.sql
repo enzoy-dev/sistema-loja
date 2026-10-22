@@ -46,5 +46,8 @@ BEGIN;
 \echo '>>> Criando histórico de status de pedidos...'
 \ir 29_historico_status_pedido.sql
 
+\echo '>>> Criando autenticação e sessões da API...'
+\ir 34_autenticacao.sql
+
 COMMIT;
 \echo '>>> Setup finalizado com sucesso!'

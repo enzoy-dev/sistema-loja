@@ -2,6 +2,9 @@
 
 Projeto de estudo com PostgreSQL e uma API Python/FastAPI para clientes, produtos, estoque e pedidos. Inclui pedidos com vários produtos, desconto e frete, cancelamento com devolução de estoque, histórico e relatórios.
 
+A API possui sessões Bearer revogáveis e perfis **admin**, **vendedor** e **leitor**.
+Confira o [guia de autenticação, migração e permissões](docs/autenticacao.md).
+
 ## Requisitos
 
 - PostgreSQL 17, com servidor em execução e `psql`/`createdb` no PATH.
@@ -46,13 +49,21 @@ A API aceita as variáveis padrão `PG*` do PostgreSQL. Como alternativa, config
 
 A documentação interativa está na rota `/docs`, e o esquema OpenAPI em `/openapi.json`. A rota `/health` consulta o banco para verificar a conexão.
 
-A API foi preparada para desenvolvimento local. Ainda não possui autenticação nem autorização; mantenha o acesso local até adicionar essas funcionalidades antes de hospedar para terceiros.
+A API inicia sem contas predefinidas. Crie um administrador e faça login seguindo
+o [guia de autenticação](docs/autenticacao.md). Para um banco existente da versão
+de pedidos múltiplos, aplique `migrations/002_autenticacao.sql` uma única vez;
+um setup novo já inclui essas tabelas. O uso externo ainda requer HTTPS,
+credenciais de banco adequadas e limites de acesso na infraestrutura.
 
 ### Rotas
 
 | Método | Rota | Função |
 | --- | --- | --- |
 | GET | `/health` | Verificar a conexão com o banco |
+| POST | `/auth/login` | Validar login/senha e emitir sessão |
+| GET / POST | `/auth/me` / `/auth/logout` | Consultar identidade / revogar sessão |
+| GET / POST | `/auth/usuarios` | Listar/criar contas internas (admin) |
+| PATCH | `/auth/usuarios/{id}` | Alterar perfil/acesso de outra conta (admin) |
 | GET / POST | `/categorias` | Listar / cadastrar categorias |
 | GET / POST | `/clientes` | Listar / cadastrar clientes |
 | GET / POST | `/produtos` | Listar / cadastrar produtos |
@@ -64,17 +75,25 @@ A API foi preparada para desenvolvimento local. Ainda não possui autenticação
 
 As listagens aceitam `limit` (1 a 100, padrão 100) e `offset` (a partir de zero). Produtos novos começam com estoque zero; use a rota de entradas com `{"quantidade": 10}` para abastecer.
 
+As rotas de negócio exigem `Authorization: Bearer TOKEN`. Consultas são permitidas
+aos três perfis; vendedor também cadastra clientes e pedidos. Categorias, produtos,
+entradas de estoque e cancelamentos exigem admin.
+
 ### Exemplo de pedido
 
 Com os dados iniciais:
 
 ```bash
 curl --fail-with-body -X POST http://127.0.0.1:8000/pedidos \
+  -H "Authorization: Bearer $LOJA_TOKEN" \
   -H 'Content-Type: application/json' \
   -d '{"cliente_id":1,"itens":[{"produto_id":2,"quantidade":2},{"produto_id":3,"quantidade":1}],"desconto":"20.00","frete":"15.00"}'
 ```
 
 O subtotal é R$ 399,70 e o total é R$ 394,70. Use o `id` retornado para consultar ou cancelar o pedido; não suponha um ID fixo, pois as sequências podem ter avançado.
+
+Exporte `LOJA_TOKEN` com uma sessão obtida em `/auth/login` de um administrador
+ou vendedor; não salve tokens no repositório.
 
 ## Regras de negócio
 
